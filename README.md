@@ -2,120 +2,91 @@
 
 ![thirdweb solidity hardhat get started hero image](hero.png)
 
-<h1 align='center'>Get Started with Solidity!</h1>
+<h1 align='center'>Build an Application with Solidity, thirdweb & React</h1>
 
-<p align='center'>This template showcases a basic Solidity smart contract with a full development and deployment environment set up.</p>
+<p align='center'>This template extends from the <a href='https://replit.com/@thirdweb-dev/Get-Started-with-Solidity-using-Hardhat-and-thirdweb-deploy'>Greeter contract template</a> by building an application on top of the smart contract.</p>
 
 <br />
 
 <b>Tools used in this template: </b>
 
-[Solidity](https://docs.soliditylang.org/en/v0.8.14/) for the development language of our smart contract
+- thirdweb [Typescript](https://portal.thirdweb.com/typescript) and [React](https://portal.thirdweb.com/react) SDKs to interact with our smart contract
 
-[Hardhat](https://hardhat.org/) for the development environment (testing, debugging, etc.)
+- [Solidity](https://docs.soliditylang.org/en/v0.8.14/), [Hardhat](https://hardhat.org/), and [thirdweb deploy](https://portal.thirdweb.com/thirdweb-deploy) to develop, test, and deploy our smart contract.
 
-[thirdweb deploy](https://portal.thirdweb.com/thirdweb-deploy) to deploy the contract to the blockchain without using a private key
+_To learn more about the contract, check out [this template](https://replit.com/@thirdweb-dev/Get-Started-with-Solidity-using-Hardhat-and-thirdweb-deploy)_.
 
 <br />
 
-<b>Key Commands: </b>
+<b>Run the Application:</b>
 
-`npx thirdweb deploy`: Deploy the smart contract
+To run the web application, change directories into `application`:
 
-`npx hardhat test`: Run the test suite (unit tests)
+```bash
+cd application
+```
+
+Then, run the development server:
+
+```bash
+npm run dev
+```
+
+Visit the application at [http://localhost:3000/](http://localhost:3000/).
 
 <br />
 
 <h2 align='center'>How to use this template</h2>
 
-<h3 align='left'><b>Exploring the Smart Contract</b></h3>
+This template has two components:
 
-Take a look at the [`Greeter.sol`](./contracts/Greeter.sol) file, you'll find a smart contract!
+1. The smart contract development in the [contract folder](./contract).
+2. The web application in the [application folder](./application).
 
-It's very basic, but it's a great starting point to explain how to build, test, and deploy smart contracts using Solidity.
+<h3>Deploying the contract</h3>
 
-Firstly, we declare our contract's [License](https://spdx.org/licenses/) and [Solidity Version](https://github.com/ethereum/solidity/releases).
+To deploy the `Greeter` contract, change directories into the `contract` folder:
 
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+```bash
+cd contract
 ```
 
-Then, we define our first `contract`, called `Greeter`!
-
-A `contract` is a smart contract, which is a collection containing:
-
-1. Functions
-2. Data / State
-
-That live at a specific address on the blockchain.
-
-```solidity
-contract Greeter {
-
-}
-```
-
-We define a `variable` (data) called `greeting`, which is a `private` `string`.
-
-This just means it is not publicly accessible by other contracts or users.
-
-```solidity
-string private greeting;
-```
-
-The `constructor` is what gets called when the contract is first created.
-
-When we deploy the contract, we'll let the contract know what the initial value of the `greeting` variable is, by passing in a `string` as an argument and setting the value of `greeting` to that string.
-
-```
-constructor(string memory _greeting) {
-    greeting = _greeting;
-}
-```
-
-Since we made our `greeting` variable `private`, we can write a `view` that reads and returns the value of the `greeting` variable.
-
-Since this is `public`, it can be accessed by other contracts or users. You'll also notice the `view` keyword, which means this function will not modify any state or data in our contract; it simply just returns some data to the caller.
-
-```solidity
-function greet() public view returns (string memory) {
-    return greeting;
-}
-```
-
-Finally, we have a `function` called `setGreeting`, which takes in a `string` as an argument and sets the value of `greeting` to that string.
-
-This allows a user to change the value of `greeting` to something else.
-
-```solidity
-function setGreeting(string memory _greeting) public {
-    greeting = _greeting;
-}
-```
-
-<h3 align='left'><b>Exploring the Smart Contract</b></h3>
-
-To deploy the contract to the blockchain, run the below script:
+Use [thirdweb deploy](https://portal.thirdweb.com/thirdweb-deploy) to deploy the contract:
 
 ```bash
 npx thirdweb deploy
 ```
 
-This command uses [thirdweb deploy](https://portal.thirdweb.com/thirdweb-deploy) to:
+Complete the deployment flow by clicking the generated link and using the thirdweb dashboard to choose your network and configuration.
 
-1. Compile your smart contract and detect any errors
-2. Upload the contract ABI to IPFS
-3. Generate a URL to deploy the contract on the thirdweb dashboard.
+<h3>Using Your Contract</h3>
 
-<h3 align='left'><b>Testing the Contract</b></h3>
+Inside the [home page](./application/pages/index.js) of the web application, connect to your smart contract inside the [`useContract`](https://portal.thirdweb.com/react/react.usecontract#usecontract-function) hook:
 
-To run the test suite and see if your contract works as you expect, run the below script:
-
-```bash
-npx hardhat test
+```jsx
+// Get the smart contract by it's address
+const { contract } = useContract("0x..."); // Your contract address here (from the thirdweb dashboard)
 ```
 
-## What's Next
+We configure the desired blockchain/network in the [`_app.js`](./application/pages/_app.js) file; be sure to change this to the network you deployed your contract to.
 
-TODO: Link to next template with UI here
+```jsx
+// This is the chainId your dApp will work on.
+const activeChainId = ChainId.Goerli;
+```
+
+Now we can easily call the functions of our [`Greeter`](./contract/Greeter.sol) contract, such as the `greet` and `setGreeting` contract:
+
+```jsx
+// Greet function (read message)
+await contract?.call("greet");
+
+// Set greeting function (write message)
+await contract?.call("setGreeting", newGreeting);
+```
+
+### Connecting to user wallets
+
+To perform a "write" operation (a transaction on the blockchain), we need to have a connected wallet, so we can use their **signer** to sign the transaction.
+
+To connect a user's wallet, we use one of thirdweb's [wallet connection hooks](https://portal.thirdweb.com/react/category/wallet-connection). The SDK automatically detects the connected wallet and uses it to sign transactions. This works because our application is wrapped in the [`ThirdwebProvider`](https://portal.thirdweb.com/react/react.thirdwebprovider), as seen in the [`_app.js`](./application/pages/_app.js) file.
