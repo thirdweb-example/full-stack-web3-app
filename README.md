@@ -28,9 +28,7 @@
 
 <h2 align='center'>How to use this template</h2>
 
-<br />
 <h3 align='left'><b>Exploring the Smart Contract</b></h3>
-<br />
 
 Take a look at the [`Greeter.sol`](./contracts/Greeter.sol) file, you'll find a smart contract!
 
@@ -96,9 +94,7 @@ function setGreeting(string memory _greeting) public {
 }
 ```
 
-<br />
 <h3 align='left'><b>Exploring the Smart Contract</b></h3>
-<br />
 
 To deploy the contract to the blockchain, run the below script:
 
@@ -112,9 +108,7 @@ This command uses [thirdweb deploy](https://portal.thirdweb.com/thirdweb-deploy)
 2. Upload the contract ABI to IPFS
 3. Generate a URL to deploy the contract on the thirdweb dashboard.
 
-<br />
 <h3 align='left'><b>Testing the Contract</b></h3>
-<br />
 
 To run the test suite and see if your contract works as you expect, run the below script:
 
