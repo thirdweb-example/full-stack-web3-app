@@ -1,6 +1,6 @@
 <!-- Banner Image -->
 
-![Thirdweb Examples Header](hero.png)
+![thirdweb solidity hardhat get started hero image](hero.png)
 
 <h1 align='center'>Get Started with Solidity!</h1>
 
@@ -27,7 +27,6 @@
 <br />
 
 <h2 align='center'>How to use this template</h2>
-<hr/>
 
 <br />
 <h3 align='left'><b>Exploring the Smart Contract</b></h3>
