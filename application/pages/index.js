@@ -46,6 +46,7 @@ export default function Home() {
 
     if (isWrongNetwork) {
       switchNetwork(ChainId.Goerli);
+      return;
     }
 
     await contract?.call("setGreeting", newGreeting);
