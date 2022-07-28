@@ -78,14 +78,17 @@ We configure the desired blockchain/network in the [`_app.js`](./application/pag
 const activeChainId = ChainId.Goerli;
 ```
 
-Now we can easily call the functions of our [`Greeter`](./contract/Greeter.sol) contract, such as the `greet` and `setGreeting` contract:
+Now we can easily call the functions of our [`Greeter`](./contract/Greeter.sol) contract, such as the `greet` and `setGreeting` contract by using the [useContractData](https://portal.thirdweb.com/react/react.usecontractdata) hook to read, and the [useContractCall](https://portal.thirdweb.com/react/react.usecontractcall) hook to write data.
 
 ```jsx
-// Greet function (read message)
-await contract?.call("greet");
+// Read the current greeting
+const { data: currentGreeting, isLoading } = useContractData(contract, "greet");
 
-// Set greeting function (write message)
-await contract?.call("setGreeting", newGreeting);
+// Write a new greeting
+const { mutate: writeGreeting, isLoading: isWriting } = useContractCall(
+  contract,
+  "setGreeting"
+);
 ```
 
 ### Connecting to user wallets
