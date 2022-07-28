@@ -29,6 +29,8 @@ cd application
 Then, run the development server:
 
 ```bash
+npm install # Install dependencies first
+
 npm run dev
 ```
 
@@ -54,6 +56,7 @@ cd contract
 Use [thirdweb deploy](https://portal.thirdweb.com/thirdweb-deploy) to deploy the contract:
 
 ```bash
+npm install # Install dependencies first
 npx thirdweb deploy
 ```
 
