@@ -6,6 +6,8 @@ import {
   useNetwork,
   useNetworkMismatch,
   ChainId,
+  useContractCall,
+  useContractData,
 } from "@thirdweb-dev/react";
 import { useState, useEffect } from "react";
 
@@ -22,26 +24,23 @@ export default function Home() {
     "0xB08BD1aa7Ee2291c60CE7FfcA4A070Fe2c5936F5"
   );
 
-  // Function to read the greeting from the blockchain
-  const [currentGreeting, setCurrentGreeting] = useState("");
+  // Read the current greeting
+  const { data: currentGreeting, isLoading } = useContractData(
+    contract,
+    "greet"
+  );
 
-  // Read the greeting from the contract
-  useEffect(() => {
-    async function readGreeting() {
-      const msg = await contract?.call("greet");
-      setCurrentGreeting(msg);
-    }
-
-    if (contract) {
-      readGreeting();
-    }
-  }, [contract]);
+  // Write a new greeting
+  const { mutate: writeGreeting, isLoading: isWriting } = useContractCall(
+    contract,
+    "setGreeting"
+  );
 
   // Store the new greeting the user enters in the input in state
   const [newGreeting, setNewGreeting] = useState("");
 
   // Function to write the new greeting to the blockchain
-  async function writeGreeting() {
+  async function writeNewGreeting() {
     if (!address) return;
 
     if (isWrongNetwork) {
@@ -49,7 +48,7 @@ export default function Home() {
       return;
     }
 
-    await contract?.call("setGreeting", newGreeting);
+    writeGreeting(newGreeting);
   }
 
   return (
@@ -62,7 +61,8 @@ export default function Home() {
 
           {/* Display current greeting */}
           <p>
-            Current greeting: <b>{currentGreeting}</b>
+            Current greeting:{" "}
+            <b>{isLoading ? "Loading..." : currentGreeting}</b>
           </p>
 
           {/* Add a new greeting */}
@@ -72,8 +72,8 @@ export default function Home() {
             className="input"
             onChange={(e) => setNewGreeting(e.target.value)}
           />
-          <button onClick={writeGreeting} className="btn">
-            Write Greeting
+          <button onClick={writeNewGreeting} className="btn">
+            {isWriting ? "Writing..." : "Write Greeting"}
           </button>
         </>
       ) : (
