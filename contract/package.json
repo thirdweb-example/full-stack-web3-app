@@ -9,7 +9,9 @@
     "hardhat": "^2.9.9"
   },
   "scripts": {
-    "deploy": "npx thirdweb deploy",
+    "build": "npx thirdweb@latest detect",
+    "deploy": "npx thirdweb@latest deploy",
+    "release": "npx thirdweb@latest release",
     "test": "npx hardhat test"
   }
 }
